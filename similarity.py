@@ -51,9 +51,10 @@ for lists1 in os.listdir(dir1):
         sublists = os.path.join(dir2, lists2)
         for file in os.listdir(sublists):
             path2 = os.path.join(dir2, lists2, file)
+            
             hash1 = hash_String(path1)
             hash2 = hash_String(path2)
-            i += 1
+            
             # print(i)
             if i % 500 == 0:
                 str = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
@@ -65,3 +66,5 @@ for lists1 in os.listdir(dir1):
                 os.system('echo ' + "find: " + path1 +
                           " ==> " + path2 + " >> find.txt")
                 # print("find: ", path1, " ==> ", path2)
+                
+            i += 1
