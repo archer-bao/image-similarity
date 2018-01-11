@@ -30,19 +30,19 @@ func getFilelist(path string) []string {
 }
 
 func main() {
-	slice1 := getFilelist("/home/user/path1")
+	slice1 := getFilelist("/home/user/mzitu")
 	tmp := 0
 	for i := 0; i < len(slice1); i++ {
 		// fmt.Println(slice[i])
-		slice2 := getFilelist("/home/user/path2")
+		slice2 := getFilelist("/home/user/mmjpg")
 		for j := 0; j < len(slice2); j++ {
-			file1, err := os.Open(slice1[1])
+			file1, err := os.Open(slice1[i])
 			if err != nil {
 				fmt.Printf("%v\n", err)
 				return
 			}
 
-			file2, err := os.Open(slice1[2])
+			file2, err := os.Open(slice2[j])
 			if err != nil {
 				fmt.Printf("%v\n", err)
 				return
@@ -53,13 +53,15 @@ func main() {
 
 			hash1, _ := goimagehash.DifferenceHash(img1)
 			hash2, _ := goimagehash.DifferenceHash(img2)
+
 			if tmp%500 == 0 {
 				fmt.Println(time.Now())
-				fmt.Println(slice1[1], " ==> ", slice1[2])
+				fmt.Println(slice1[i], " ==> ", slice1[j])
 			}
+
 			distance, _ := hash1.Distance(hash2)
 			if distance <= 5 {
-				fmt.Println("find: ", slice1[1], " ==> ", slice1[2])
+				fmt.Println("find: ", slice1[i], " ==> ", slice1[j])
 			}
 
 			tmp += 1
