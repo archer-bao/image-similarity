@@ -42,9 +42,8 @@ def Difference(dhash1, dhash2):
     difference = dhash1 ^ dhash2  # 将两个数值进行异或运算
     return bin(difference).count('1')  # 异或运算后计算两数不同的个数，即个数<5，可视为同一或相似图片
 
-dir1 = "/home/user/jpg1"
-dir2 = "/home/user/jpg2"
-
+dir1 = "/home/user/mmjpg"
+dir2 = "/home/user/mzitu"
 i = 0
 for lists1 in os.listdir(dir1):
     path1 = os.path.join(dir1, lists1)
@@ -55,9 +54,10 @@ for lists1 in os.listdir(dir1):
             hash1 = hash_String(path1)
             hash2 = hash_String(path2)
             i += 1
-            print(i)
+            # print(i)
             if i % 500 == 0:
-                time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+                str = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+                os.system('echo ' + str + " >> compare.txt")
                 os.system('echo ' + "compare: " + path1 +
                           " : " + path2 + " >> compare.txt")
                 # print("compare: ", path1, " : ", path2)
