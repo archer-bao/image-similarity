@@ -146,8 +146,8 @@ public class BMPLoader {
     public static void main(String[] args) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        String Path1 = "/home/archer/cobbler/80/mzitu";
-        String Path2 = "/home/archer/cobbler/80/mmjpg";
+        String Path1 = "/home/user/path1";
+        String Path2 = "/home/user/path2";
         List<File> f1 = new WalkFile().ReadAllFile(Path1);
         List<File> f2 = new WalkFile().ReadAllFile(Path2);
         int i = 0;
