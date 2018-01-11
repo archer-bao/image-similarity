@@ -42,8 +42,8 @@ def Difference(dhash1, dhash2):
     difference = dhash1 ^ dhash2  # 将两个数值进行异或运算
     return bin(difference).count('1')  # 异或运算后计算两数不同的个数，即个数<5，可视为同一或相似图片
 
-dir1 = "/home/user/mmjpg"
-dir2 = "/home/user/mzitu"
+dir1 = "/home/user/path1"
+dir2 = "/home/user/path2"
 i = 0
 for lists1 in os.listdir(dir1):
     path1 = os.path.join(dir1, lists1)
