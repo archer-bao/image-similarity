@@ -5,24 +5,25 @@
 import os
 import threading
 import time
+import multiprocessing
 
 from PIL import Image  # 导入pillow库下的image模块，主要用于图片缩放、图片灰度化、获取像素灰度值
-
 from PIL import ImageFile
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+
 # image为图片的路径，resize_width为缩放图片的宽度，resize_heith为缩放图片的高度
-
-
 def grayscale_Image(image, resize_width=9, resize_heith=8):
     try:
         im = Image.open(image)  # 使用Image的open方法打开图片
         smaller_image = im.resize((resize_width, resize_heith))  # 将图片进行缩放
         grayscale_image = smaller_image.convert('L')  # 将图片灰度化
         return grayscale_image
-    except:
-        return tuple()
+    except Exception as e:
+        print(e)
+        exit()
+        # return Image.Image()
 
 
 def hash_String(image, resize_width=9, resize_heith=8):
@@ -49,43 +50,50 @@ def GetFiles(path):
     list_dirs = os.walk(path)
     for root, dirs, files in list_dirs:
         for f in files:
-            # print(os.path.join(root, f))
             files_list.append(os.path.join(root, f))
     return files_list
 
 
-def main():
-    dir1 = "/home/user/path1"
-    dir2 = "/home/user/path2"
-
-
-    # print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-    files_list1 = GetFiles(dir1)
-    files_list2 = GetFiles(dir2)
-    # print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-
+def Dowork(files_list1, files_list2):
     i = 0
     for f1 in files_list1:
         for f2 in files_list2:
             # print(f1)
             # print(f2)
-            # print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
             hash1 = hash_String(f1)
             hash2 = hash_String(f2)
 
             if i % 500 == 0:
                 str = time.strftime('%Y-%m-%d %H:%M:%S',
                                     time.localtime(time.time()))
-                os.system('echo ' + str + " >> compare.txt")
-                # os.system('echo ' + "compare: " + f1 +
-                # " : " + f2 + " >> compare.txt")
-                # print("compare: ", f1, " : ", f2)
+                print("compare: ", f1, " : ", f2)
             if Difference(hash1, hash2) <= 5:
-                os.system('echo ' + "find: " + f1 +
-                          " ==> " + f2 + " >> find.txt")
-                # print("find: ", f1, " ==> ", f2)
+                print("find: ", f1, " ==> ", f2)
             i += 1
             # print(i)
 
 
+def main():
+    num = multiprocessing.cpu_count()
+    print("CPU number:", num)
+
+    dir1 = "/home/user/path1"
+    dir2 = "/home/user/path2"
+
+    files_list1 = GetFiles(dir1)
+    length1 = len(files_list1)
+
+    files_list2 = GetFiles(dir2)
+    length2 = len(files_list2)
+
+    for i in range(0, multiprocessing.cpu_count()):
+        p = multiprocessing.Process(target=Dowork, args=(
+            files_list1[i * (length1 // num):(i + 1) * (length1 // num)],
+            files_list2[i * (length2 // num):(i + 1) * (length2 // num)])
+        )
+        p.start()
+    print("wait...")
+
+
+# ==> start
 main()
