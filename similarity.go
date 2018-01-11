@@ -30,11 +30,11 @@ func getFilelist(path string) []string {
 }
 
 func main() {
-	slice1 := getFilelist("/home/user/mzitu")
+	slice1 := getFilelist("/home/user/path1")
 	tmp := 0
 	for i := 0; i < len(slice1); i++ {
 		// fmt.Println(slice[i])
-		slice2 := getFilelist("/home/user/mmjpg")
+		slice2 := getFilelist("/home/user/path2")
 		for j := 0; j < len(slice2); j++ {
 			file1, err := os.Open(slice1[1])
 			if err != nil {
