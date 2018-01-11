@@ -3,6 +3,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import threading
 import time
 
 from PIL import Image  # 导入pillow库下的image模块，主要用于图片缩放、图片灰度化、获取像素灰度值
@@ -42,29 +43,49 @@ def Difference(dhash1, dhash2):
     difference = dhash1 ^ dhash2  # 将两个数值进行异或运算
     return bin(difference).count('1')  # 异或运算后计算两数不同的个数，即个数<5，可视为同一或相似图片
 
-dir1 = "/home/user/path1"
-dir2 = "/home/user/path2"
-i = 0
-for lists1 in os.listdir(dir1):
-    path1 = os.path.join(dir1, lists1)
-    for lists2 in os.listdir(dir2):
-        sublists = os.path.join(dir2, lists2)
-        for file in os.listdir(sublists):
-            path2 = os.path.join(dir2, lists2, file)
-            
-            hash1 = hash_String(path1)
-            hash2 = hash_String(path2)
-            
-            # print(i)
+
+def GetFiles(path):
+    files_list = []
+    list_dirs = os.walk(path)
+    for root, dirs, files in list_dirs:
+        for f in files:
+            # print(os.path.join(root, f))
+            files_list.append(os.path.join(root, f))
+    return files_list
+
+
+def main():
+    dir1 = "/home/user/path1"
+    dir2 = "/home/user/path2"
+
+
+    # print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+    files_list1 = GetFiles(dir1)
+    files_list2 = GetFiles(dir2)
+    # print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+
+    i = 0
+    for f1 in files_list1:
+        for f2 in files_list2:
+            # print(f1)
+            # print(f2)
+            # print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+            hash1 = hash_String(f1)
+            hash2 = hash_String(f2)
+
             if i % 500 == 0:
-                str = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+                str = time.strftime('%Y-%m-%d %H:%M:%S',
+                                    time.localtime(time.time()))
                 os.system('echo ' + str + " >> compare.txt")
-                os.system('echo ' + "compare: " + path1 +
-                          " : " + path2 + " >> compare.txt")
-                # print("compare: ", path1, " : ", path2)
+                # os.system('echo ' + "compare: " + f1 +
+                # " : " + f2 + " >> compare.txt")
+                # print("compare: ", f1, " : ", f2)
             if Difference(hash1, hash2) <= 5:
-                os.system('echo ' + "find: " + path1 +
-                          " ==> " + path2 + " >> find.txt")
-                # print("find: ", path1, " ==> ", path2)
-                
+                os.system('echo ' + "find: " + f1 +
+                          " ==> " + f2 + " >> find.txt")
+                # print("find: ", f1, " ==> ", f2)
             i += 1
+            # print(i)
+
+
+main()
